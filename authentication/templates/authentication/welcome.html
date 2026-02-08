@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Study Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* SCROLL & STRUCTURE */
+        * {box-sizing:border-box;margin:0;padding:0;}
+        html {scroll-behavior:smooth;overflow-x:hidden;}
+        body {font-family:'Poppins',sans-serif;overflow-y:auto !important;overflow-x:hidden;min-height:100vh;background:linear-gradient(135deg,#1e1e3f 0%,#2a1f5a 50%,#1a1a40 100%);color:#e8e8f0;line-height:1.6;}
+        
+        /* ANIMATED BACKGROUND - COMPACT THEME */
+        .animated-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;}
+        .floating-shapes{position:absolute;width:100%;height:100%;}
+        .shape{position:absolute;opacity:0.15;animation:float 18s infinite ease-in-out;}
+        .shape1{top:15%;left:8%;font-size:60px;color:#a8b8ff;animation-delay:0s;}
+        .shape2{top:55%;left:85%;font-size:70px;color:#ff9fd8;animation-delay:3s;}
+        .shape3{top:75%;left:15%;font-size:55px;color:#ffd700;animation-delay:6s;}
+        .shape4{top:25%;left:75%;font-size:65px;color:#90e0ef;animation-delay:9s;}
+        @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(180deg);}}
+        
+        /* CONTAINER */
+        .container {max-width:1200px;margin:0 auto;padding:40px 20px;position:relative;z-index:10;}
+        
+        /* HERO SECTION - DARK VIBRANT THEME */
+        .hero{text-align:center;padding:35px 20px 22px;color:#fff;position:relative;overflow:hidden;margin-bottom:50px;border-radius:25px;box-shadow:0 15px 50px rgba(0,0,0,0.4);backdrop-filter:blur(15px);}
+        .hero::before {content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(102,126,234,0.92),rgba(118,75,162,0.92));z-index:-1;}
+        .hero h1{font-size:36px;font-weight:700;margin-bottom:11px;text-shadow:2px 2px 12px rgba(0,0,0,0.4);}
+        .hero p{font-size:15px;opacity:0.97;max-width:600px;margin:0 auto 27px;line-height:1.6;}
+        .action-buttons {display:flex;gap:25px;justify-content:center;flex-wrap:wrap;}
+        .action-btn {padding:16px 35px;background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.08));color:#fff;border:2px solid rgba(255,255,255,0.25);border-radius:25px;font-weight:700;font-size:16px;transition:all 0.3s;backdrop-filter:blur(20px);cursor:pointer;display:inline-flex;align-items:center;gap:10px;text-decoration:none;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
+        .action-btn:hover {background:linear-gradient(135deg,rgba(255,255,255,0.25),rgba(255,255,255,0.15));border-color:rgba(255,255,255,0.4);box-shadow:0 12px 35px rgba(0,0,0,0.4);transform:translateY(-3px);}
+        .action-btn.primary {background:linear-gradient(135deg,#ff4768,#ff2e63);border-color:rgba(255,71,104,0.6);box-shadow:0 8px 25px rgba(255,71,104,0.4);}
+        .action-btn.primary:hover {box-shadow:0 15px 40px rgba(255,71,104,0.6);}
+        
+        /* FEATURES GRID - DARK CARD STYLE */
+        .features {display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:23px;padding:0 40px 27px;max-width:950px;margin:0 auto;}
+        .features h2 {text-align:center;font-size:32px;font-weight:700;color:#e8e8f0;margin-bottom:50px;grid-column:1/-1;text-shadow:0 2px 4px rgba(0,0,0,0.3);}
+        .feature-card{background:linear-gradient(145deg,rgba(40,40,70,0.95),rgba(30,30,60,0.95));border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:30px 24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.4);transition:transform 0.3s,box-shadow 0.3s,border 0.3s;cursor:pointer;position:relative;overflow:hidden;backdrop-filter:blur(10px);}
+        .feature-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:3px;background:linear-gradient(90deg,#667eea,#764ba2);transition:left 0.5s;}
+        .feature-card:hover::before{left:0;}
+        .feature-card:hover{transform:translateY(-6px);box-shadow:0 15px 40px rgba(102,126,234,0.3);border-color:rgba(102,126,234,0.4);}
+        .feature-icon{width:68px;height:68px;margin:0 auto 17px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:31px;color:#fff;box-shadow:0 5px 20px rgba(102,126,234,0.4);transition:all 0.3s;}
+        .feature-card:hover .feature-icon {transform:scale(1.1) rotate(10deg);box-shadow:0 8px 25px rgba(102,126,234,0.6);}
+        .feature-card h3{font-size:19px;color:#e8e8f0;margin-bottom:9px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.3);}
+        .feature-card p{font-size:13.5px;color:#c8c8d8;line-height:1.6;margin-bottom:17px;}
+        .badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#ff4768,#ff2e63);color:#fff;padding:5px 11px;border-radius:13px;font-size:10px;font-weight:600;text-transform:uppercase;box-shadow:0 4px 15px rgba(255,71,104,0.4);}
+        
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .container {padding:30px 15px;}
+            .hero {padding:28px 20px 18px;border-radius:20px;margin-bottom:30px;}
+            .hero h1 {font-size:30px;}
+            .hero p {font-size:14px;}
+            .action-buttons {flex-direction:column;gap:20px;align-items:center;}
+            .action-btn {width:100%;max-width:320px;justify-content:center;}
+            .features {grid-template-columns:1fr;gap:18px;padding:0 20px 20px;}
+            .features h2 {font-size:26px;}
+        }
+        @media(max-height:700px) {
+            .hero{padding:28px 20px 18px;}
+            .hero h1{font-size:32px;}
+            .features{gap:20px;padding:0 35px 22px;}
+        }
+        
+        .sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+    </style>
+</head>
+<body>
+    <!-- ANIMATED BACKGROUND - VIBRANT DARK THEME -->
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <i class="fas fa-book shape shape1"></i>
+            <i class="fas fa-lightbulb shape shape2"></i>
+            <i class="fas fa-brain shape shape3"></i>
+            <i class="fas fa-atom shape shape4"></i>
+        </div>
+    </div>
+    
+    <main class="container">
+        <!-- HERO SECTION -->
+        <section class="hero" aria-labelledby="hero-title">
+            <h1 id="hero-title">🚀 Welcome to Study Assistant</h1>
+            <p>Your personal AI learning companion. Transform notes into mastery with intelligent quizzes, instant explanations, and adaptive study plans designed for your success.</p>
+            <div class="action-buttons">
+                <a href="{% url 'register' %}" class="action-btn primary" aria-label="Create free account">
+                    <i class="fas fa-user-plus"></i> Get Started Free
+                </a>
+                <a href="{% url 'login' %}" class="action-btn" aria-label="Sign in">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </a>
+            </div>
+        </section>
+        
+        <!-- FEATURES SECTION -->
+        <section class="features" aria-labelledby="features-title">
+            <h2 id="features-title">AI-Powered Features</h2>
+            
+            <article class="feature-card">
+                <span class="badge">Core</span>
+                <div class="feature-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <h3>Smart Note Generator</h3>
+                <p>Upload any document and get AI-organized notes, summaries, and key highlights instantly. Perfect for exam prep.</p>
+            </article>
+            
+            <article class="feature-card">
+                <span class="badge">New</span>
+                <div class="feature-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Quiz Arena</h3>
+                <p>Create unlimited AI quizzes from your notes. Challenge yourself or friends with competitive learning.</p>
+            </article>
+            
+            <article class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Instant Doubt Solver</h3>
+                <p>Ask questions about any topic. Get precise, context-aware answers powered by advanced AI models.</p>
+            </article>
+            
+            <article class="feature-card">
+                <span class="badge">Pro</span>
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Adaptive Study Plans</h3>
+                <p>AI analyzes your progress and creates personalized learning paths to maximize retention and results.</p>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
+
+
+
+
+
+

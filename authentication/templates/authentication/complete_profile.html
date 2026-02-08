@@ -1,0 +1,44 @@
+<!-- authentication/complete_profile.html (HTML + CSS in ONE file) -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complete Profile</title>
+    <style>
+        body{font-family:Arial,sans-serif;margin:40px;background:#f5f5f5;padding:20px}
+        .form-container{max-width:500px;margin:0 auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+        h2{text-align:center;color:#333;margin:0 0 30px;font-size:28px}
+        .form-group{margin-bottom:22px}
+        label{display:block;margin-bottom:8px;font-weight:500;color:#555;font-size:15px}
+        input[type="text"],input[type="date"]{width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:8px;font-size:16px;box-sizing:border-box;transition:all 0.3s}
+        input:focus{outline:none;border-color:#4CAF50;box-shadow:0 0 0 3px rgba(76,175,80,0.1)}
+        .btn{width:100%;padding:14px 20px;background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(76,175,80,0.3)}
+        .btn:hover{background:linear-gradient(135deg,#45a049,#3d8b40);transform:translateY(-1px);box-shadow:0 4px 12px rgba(76,175,80,0.4)}
+        .errorlist{color:#d32f2f;background:#ffebee;padding:8px;border-radius:4px;font-size:14px;margin:5px 0}
+        .header{text-align:center;margin-bottom:10px;color:#666;font-size:14px}
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>🏆 Complete Your Profile</h2>
+        <p class="header">Add your details to unlock AI features</p>
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="errorlist">{{ form.non_field_errors }}</div>
+            {% endif %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="errorlist">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn">💾 Save & Continue</button>
+        </form>
+    </div>
+</body>
+</html>

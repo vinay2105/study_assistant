@@ -1,0 +1,90 @@
+<!-- templates/base.html - DARK PREMIUM THEME -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Study Assistant{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1e1e3f 0%,#2a1f5a 50%,#1a1a40 100%);min-height:100vh;color:#e8e8f0;overflow-x:hidden;position:relative;}
+        
+        /* ANIMATED BACKGROUND */
+        .animated-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;}
+        .floating-shapes{position:absolute;width:100%;height:100%;}
+        .shape{position:absolute;opacity:0.12;animation:float 18s infinite ease-in-out;}
+        .shape1{top:15%;left:8%;font-size:60px;color:#a8b8ff;animation-delay:0s;}
+        .shape2{top:55%;left:85%;font-size:70px;color:#ff9fd8;animation-delay:3s;}
+        .shape3{top:75%;left:15%;font-size:55px;color:#ffd700;animation-delay:6s;}
+        .shape4{top:25%;left:75%;font-size:65px;color:#90e0ef;animation-delay:9s;}
+        @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(180deg);}}
+        
+        /* NAVBAR - DARK GLASSMorphism */
+        .navbar{background:linear-gradient(145deg,rgba(40,40,70,0.95),rgba(30,30,60,0.95));backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.1);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);position:sticky;top:0;z-index:1000;}
+        .navbar::before {content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#667eea,#764ba2);opacity:0.8;}
+        
+        /* LOGO */
+        .logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:#e8e8f0;text-decoration:none;transition:all 0.3s;}
+        .logo:hover {color:#a8b8ff;text-shadow:0 0 15px rgba(168,184,255,0.5);}
+        .logo i{font-size:26px;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(102,126,234,0.4));}
+        
+        /* NAV BUTTONS */
+        .nav-right{display:flex;align-items:center;gap:15px;}
+        .nav-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(102,126,234,0.2),rgba(118,75,162,0.2));backdrop-filter:blur(15px);border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#e8e8f0;cursor:pointer;transition:all 0.3s;text-decoration:none;position:relative;overflow:hidden;}
+        .nav-btn::before {content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);transition:all 0.3s;transform:translate(-50%,-50%);}
+        .nav-btn:hover::before {width:100%;height:100%;}
+        .nav-btn:hover {background:linear-gradient(135deg,rgba(102,126,234,0.4),rgba(118,75,162,0.4));border-color:rgba(102,126,234,0.5);color:#fff;transform:scale(1.12) rotate(5deg);box-shadow:0 8px 25px rgba(102,126,234,0.4);}
+        .nav-btn i{font-size:20px;}
+        .nav-btn.active {background:linear-gradient(135deg,#667eea,#764ba2);border-color:rgba(255,255,255,0.3);color:#fff;box-shadow:0 6px 20px rgba(102,126,234,0.5);}
+        
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .navbar {padding:12px 20px;}
+            .logo {font-size:18px;}
+            .logo i {font-size:22px;}
+            .nav-right {gap:10px;}
+            .nav-btn {width:40px;height:40px;}
+            .nav-btn i {font-size:18px;}
+        }
+        
+        {% block extra_style %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- ANIMATED BACKGROUND -->
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <i class="fas fa-book shape shape1"></i>
+            <i class="fas fa-lightbulb shape shape2"></i>
+            <i class="fas fa-brain shape shape3"></i>
+            <i class="fas fa-atom shape shape4"></i>
+        </div>
+    </div>
+    
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Study Assistant</span>
+        </a>
+        <div class="nav-right">
+            <a href="{% url 'home' %}" class="nav-btn home-btn" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="{% url 'history' %}" class="nav-btn history-btn" title="History">
+    <i class="fas fa-history"></i>
+</a>
+
+            <a href="{% url 'profile' %}" class="nav-btn profile-btn" title="Profile">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
+    </nav>
+    
+    {% block content %}{% endblock %}
+</body>
+</html>
+
+
+

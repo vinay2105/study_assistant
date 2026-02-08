@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}Upload Note | Study Assistant{% endblock %}
+
+{% block extra_style %}
+<style>
+.upload-wrapper{width:520px !important;margin:30px auto !important;padding:0 15px;position:relative;display:inline-block;}
+
+.animated-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;overflow:hidden;}
+.floating-shapes{position:absolute;width:100%;height:100%;}
+.shape{position:absolute;opacity:0.08;animation:float 22s infinite ease-in-out;font-size:40px;}
+.shape1{top:20%;left:10%;color:#a8b8ff;}
+.shape2{top:65%;left:80%;color:#90e0ef;}
+.shape3{top:75%;left:15%;color:#667eea;}
+.shape4{top:35%;left:70%;color:#b8c8ff;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+
+.upload-card{
+background:linear-gradient(145deg,rgba(40,40,70,0.95),rgba(25,25,55,0.95));
+backdrop-filter:blur(25px);
+border-radius:20px;
+padding:25px 20px;
+box-shadow:0 15px 50px rgba(0,0,0,0.55);
+border:1px solid rgba(255,255,255,0.08);
+position:relative;
+overflow:hidden;
+}
+
+.upload-title{font-size:24px;font-weight:700;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#a8b8ff,#90e0ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.upload-subtitle{text-align:center;color:#c8c8d8;margin-bottom:20px;font-size:12.5px;}
+
+.input-group{margin-bottom:18px;}
+.input-label{display:block;margin-bottom:5px;font-size:11.5px;color:#b8b8d0;}
+
+.premium-input{
+width:100%;
+padding:11px 12px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.12);
+background:rgba(20,20,45,0.9);
+color:#e8e8f0;
+font-size:12.5px;
+outline:none;
+}
+
+.file-zone{
+border:2px dashed rgba(255,255,255,0.18);
+padding:22px 12px;
+border-radius:12px;
+text-align:center;
+cursor:pointer;
+background:rgba(20,20,45,0.7);
+position:relative;
+}
+
+.file-zone input{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+opacity:0;
+cursor:pointer;
+}
+
+.file-preview-list{margin-top:15px;}
+
+.file-preview{
+display:flex;
+align-items:center;
+background:rgba(25,25,50,0.9);
+border-radius:10px;
+padding:10px 12px;
+margin-bottom:8px;
+border:1px solid rgba(102,126,234,0.2);
+}
+
+.file-icon{
+width:38px;height:38px;
+background:linear-gradient(135deg,#667eea,#764ba2);
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin-right:10px;
+color:#fff;
+}
+
+.success-msg{
+background:rgba(102,126,234,0.15);
+border:1px solid rgba(102,126,234,0.4);
+border-radius:10px;
+padding:10px;
+text-align:center;
+margin-bottom:15px;
+color:#a8b8ff;
+font-size:12px;
+}
+
+.preference-box{
+background:rgba(20,20,45,0.85);
+border-radius:12px;
+padding:14px;
+border:1px solid rgba(255,255,255,0.08);
+margin-bottom:18px;
+}
+
+.pref-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+/* CLEAN LOADING STATE */
+.upload-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:#fff;
+cursor:pointer;
+transition:all 0.3s ease;
+margin-top:10px;
+}
+
+.upload-btn:hover{background:linear-gradient(135deg,#5a6fd6,#6a4190);transform:translateY(-1px);}
+
+/* Generating Message */
+.generating-msg{
+display:none;
+background:linear-gradient(135deg,rgba(102,126,234,0.15),rgba(118,75,162,0.15));
+border:2px solid rgba(102,126,234,0.3);
+border-radius:14px;
+padding:20px;
+text-align:center;
+margin-top:15px;
+color:#a8b8ff;
+font-size:15px;
+font-weight:500;
+}
+
+.generating-icon{
+font-size:28px;
+margin-bottom:10px;
+display:block;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%,100%{opacity:1;transform:scale(1);}
+50%{opacity:0.7;transform:scale(1.1);}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-wrapper" style="width:520px;position:relative;left:50%;transform:translateX(-50%);margin-top:30px;">
+
+<div class="upload-card">
+
+<h1 class="upload-title">Upload Notes</h1>
+<p class="upload-subtitle">Generate structured smart notes instantly</p>
+
+
+
+<form id="uploadForm" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="input-group">
+<label class="input-label">Note Title</label>
+<input type="text" name="title" class="premium-input" placeholder="Enter note title..." required>
+</div>
+
+<div class="input-group">
+<label class="input-label">PDF File</label>
+<div class="file-zone">
+<i class="fas fa-cloud-upload-alt"></i>
+<p>Drop PDF or click to upload</p>
+<input type="file" name="file" accept=".pdf" required>
+</div>
+</div>
+
+<div id="file-preview-list" class="file-preview-list"></div>
+
+<!-- Preference Section -->
+<div class="preference-box">
+<label class="input-label">Generation Preferences</label>
+
+<div class="pref-grid">
+<select name="style" class="premium-input">
+<option value="concise">Concise Notes</option>
+<option value="detailed">Detailed Explanation</option>
+<option value="exam">Exam-Oriented</option>
+</select>
+
+<select name="format" class="premium-input">
+<option value="bullets">Bullet Points</option>
+<option value="summary">Structured Summary</option>
+<option value="qa">Q&A Format</option>
+</select>
+</div>
+</div>
+
+<button type="submit" class="upload-btn" id="submitBtn">Generate Notes</button>
+
+<!-- GENERATING MESSAGE - Replaces button -->
+<div id="generatingMsg" class="generating-msg">
+<i class="fas fa-brain generating-icon"></i>
+<strong>Generating notes...</strong><br>
+<span style="font-size:13px;opacity:0.8;">(AI processing may take a while)</span>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const generatingMsg = document.getElementById('generatingMsg');
+    
+    form.addEventListener('submit', function(e) {
+        // Hide button, show message immediately
+        submitBtn.style.display = 'none';
+        generatingMsg.style.display = 'block';
+        
+        // Uncomment below for actual form submission
+        // Form will submit normally after this
+    });
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+

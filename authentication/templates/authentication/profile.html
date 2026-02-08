@@ -1,0 +1,231 @@
+<!-- templates/authentication/profile.html - SCROLLABLE & STRUCTURED -->
+{% extends 'base.html' %}
+{% block title %}Profile | Study Assistant{% endblock %}
+{% block extra_style %}
+<style>
+/* SCROLL & STRUCTURE FIXES */
+* {box-sizing:border-box;}
+body {overflow-y:auto !important;overflow-x:hidden;min-height:100vh;padding-bottom:50px;}
+.animated-bg {position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none;}
+.floating-shapes {position:absolute;width:100%;height:100%;}
+.shape {position:absolute;opacity:0.15;animation:float 18s infinite ease-in-out;}
+.shape1 {top:15%;left:8%;font-size:60px;color:#a8b8ff;animation-delay:0s;}
+.shape2 {top:55%;left:85%;font-size:70px;color:#ff9fd8;animation-delay:3s;}
+.shape3 {top:75%;left:15%;font-size:55px;color:#ffd700;animation-delay:6s;}
+.shape4 {top:25%;left:75%;font-size:65px;color:#90e0ef;animation-delay:9s;}
+@keyframes float {0%,100% {transform:translateY(0) rotate(0deg);} 50% {transform:translateY(-20px) rotate(180deg);}}
+.profile-container {max-width:650px;margin:25px auto;padding:0 20px;position:relative;z-index:10;}
+.profile-header {background:linear-gradient(145deg,rgba(40,40,70,0.95),rgba(30,30,60,0.95));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:22px;padding:28px 25px;text-align:center;box-shadow:0 15px 50px rgba(0,0,0,0.5);position:relative;overflow:hidden;color:#e8e8f0;}
+.profile-header::before {content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,#667eea,#764ba2);}
+.header-top {display:flex;justify-content:flex-end;margin-bottom:10px;}
+.logout-btn-top {padding:7px 18px;background:linear-gradient(135deg,#ff4768,#ff2e63);color:#fff;border-radius:18px;text-decoration:none;font-weight:600;font-size:11px;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,71,104,0.4);cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;}
+.logout-btn-top:hover {box-shadow:0 6px 20px rgba(255,71,104,0.6);transform:scale(1.05);}
+.avatar {width:75px;height:75px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:36px;color:#fff;box-shadow:0 6px 20px rgba(102,126,234,0.5);}
+.profile-name {font-size:22px;font-weight:700;color:#e8e8f0;margin-bottom:4px;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.profile-email {font-size:13px;color:#c8c8d8;margin-bottom:15px;}
+.edit-btn {display:inline-block;padding:9px 22px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:18px;text-decoration:none;font-weight:600;font-size:12px;transition:all 0.3s;box-shadow:0 4px 15px rgba(102,126,234,0.4);cursor:pointer;border:none;}
+.edit-btn:hover {box-shadow:0 6px 20px rgba(102,126,234,0.6);transform:scale(1.05);}
+.info-grid {background:linear-gradient(145deg,rgba(40,40,70,0.95),rgba(30,30,60,0.95));backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:20px 25px;box-shadow:0 15px 50px rgba(0,0,0,0.5);margin-top:15px;color:#e8e8f0;}
+.info-row {display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.1);}
+.info-row:last-child {border-bottom:none;}
+.info-label {display:flex;align-items:center;gap:10px;font-size:13px;color:#c8c8d8;font-weight:500;}
+.info-label i {width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,rgba(102,126,234,0.2),rgba(118,75,162,0.2));display:flex;align-items:center;justify-content:center;font-size:15px;color:#a8b8ff;}
+.info-value {font-size:14px;color:#e8e8f0;font-weight:600;text-align:right;max-width:60%;word-break:break-word;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.info-value.masked {font-family:monospace;letter-spacing:1px;color:#a0a0b8;font-size:13px;}
+/* MODAL STRUCTURE */
+.modal {display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);animation:fadeIn 0.3s;overflow-y:auto;}
+.modal-content {background:linear-gradient(145deg,rgba(40,40,70,0.98),rgba(30,30,60,0.98));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);margin:5% auto;padding:30px 35px;border-radius:22px;max-width:500px;box-shadow:0 25px 70px rgba(0,0,0,0.6);animation:slideDown 0.3s;position:relative;max-height:90vh;overflow-y:auto;color:#e8e8f0;}
+@keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
+@keyframes slideDown {from {transform:translateY(-50px);opacity:0;} to {transform:translateY(0);opacity:1;}}
+.close-modal {position:absolute;right:20px;top:20px;font-size:28px;font-weight:700;color:#a0a0b8;cursor:pointer;transition:color 0.3s;}
+.close-modal:hover {color:#a8b8ff;}
+.modal h2 {text-align:center;color:#e8e8f0;margin-bottom:25px;font-size:24px;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.form-group {margin-bottom:18px;}
+.form-group label {display:block;margin-bottom:6px;font-weight:600;color:#c8c8d8;font-size:13px;}
+.form-group input {width:100%;padding:11px 14px;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.15);border-radius:12px;font-size:14px;color:#e8e8f0;transition:all 0.3s;box-sizing:border-box;backdrop-filter:blur(10px);}
+.form-group input::placeholder {color:#a0a0b8;}
+.form-group input:focus {outline:none;border-color:rgba(102,126,234,0.6);box-shadow:0 0 0 3px rgba(102,126,234,0.15);}
+.save-btn {width:100%;padding:12px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 6px 20px rgba(102,126,234,0.4);}
+.save-btn:hover {box-shadow:0 8px 25px rgba(102,126,234,0.6);transform:translateY(-2px);}
+.confirm-modal {text-align:center;}
+.confirm-modal h2 {color:#ffb3c6;}
+.confirm-modal p {color:#c8c8d8;font-size:15px;margin-bottom:25px;line-height:1.6;}
+.confirm-btns {display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.confirm-btn {padding:11px 30px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;border:none;text-decoration:none;display:inline-block;min-width:100px;}
+.cancel-btn {background:rgba(255,255,255,0.15);color:#c8c8d8;border:1px solid rgba(255,255,255,0.2);}
+.cancel-btn:hover {background:rgba(255,255,255,0.25);}
+.confirm-logout {background:linear-gradient(135deg,#ff4768,#ff2e63);color:#fff;box-shadow:0 4px 15px rgba(255,71,104,0.4);}
+.confirm-logout:hover {box-shadow:0 6px 20px rgba(255,71,104,0.6);transform:scale(1.05);}
+/* RESPONSIVE */
+@media(max-width:768px) {.profile-container {padding:0 15px;margin:15px auto;}.modal-content {margin:10% 15px;padding:25px 20px;max-height:80vh;}.info-row {flex-direction:column;align-items:flex-start;gap:6px;text-align:left;}.info-value {text-align:left;max-width:100%;}.confirm-btns {flex-direction:column;align-items:center;}}
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="animated-bg">
+    <div class="floating-shapes">
+        <i class="fas fa-user-graduate shape shape1"></i>
+        <i class="fas fa-star shape shape2"></i>
+        <i class="fas fa-trophy shape shape3"></i>
+    </div>
+</div>
+<main class="profile-container">
+    <section class="profile-header">
+        <div class="header-top">
+            <button class="logout-btn-top" onclick="openLogoutModal()" aria-label="Logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+        <div class="avatar" role="img" aria-label="User avatar">
+            <i class="fas fa-user-circle"></i>
+        </div>
+        <h1 class="profile-name">{{ profile.full_name|default:"Guest User" }}</h1>
+        <p class="profile-email">@{{ user.username }}</p>
+        <button class="edit-btn" onclick="openModal()" aria-label="Edit profile">
+            <i class="fas fa-pen"></i> Edit Profile
+        </button>
+    </section>
+    <section class="info-grid" aria-labelledby="profile-info">
+        <h2 id="profile-info" class="sr-only">Profile Information</h2>
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-id-badge" aria-hidden="true"></i>
+                <span>Username</span>
+            </div>
+            <div class="info-value">{{ user.username }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <span>Email Address</span>
+            </div>
+            <div class="info-value">{{ user.email }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-user-tag" aria-hidden="true"></i>
+                <span>Full Name</span>
+            </div>
+            <div class="info-value">{{ profile.full_name|default:"Not set" }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                <span>Date of Birth</span>
+            </div>
+            <div class="info-value">{{ profile.date_of_birth|date:"M d, Y"|default:"Not set" }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <span>API Key</span>
+            </div>
+            <div class="info-value masked">
+                {% if profile.api_key %}
+                    {{ profile.api_key|slice:":10" }}••••••
+                {% else %}
+                    Not configured
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="editModal" class="modal" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()" aria-label="Close">&times;</span>
+        <h2 id="editModalTitle"><i class="fas fa-edit" aria-hidden="true"></i> Edit Profile</h2>
+        <form method="POST" action="{% url 'profile' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_full_name">Full Name</label>
+                <input type="text" name="full_name" id="id_full_name" value="{{ profile.full_name }}" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="id_date_of_birth">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="id_date_of_birth" value="{{ profile.date_of_birth|date:'Y-m-d' }}">
+            </div>
+            <div class="form-group">
+                <label for="id_api_key">API Key</label>
+                <input type="text" name="api_key" id="id_api_key" value="{{ profile.api_key }}" placeholder="Enter your API key">
+            </div>
+            <button type="submit" class="save-btn">
+                <i class="fas fa-save" aria-hidden="true"></i> Save Changes
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div id="logoutModal" class="modal" role="dialog" aria-labelledby="logoutModalTitle" aria-hidden="true">
+    <div class="modal-content confirm-modal">
+        <span class="close-modal" onclick="closeLogoutModal()" aria-label="Close">&times;</span>
+        <h2 id="logoutModalTitle"><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Confirm Logout</h2>
+        <p>Are you sure you want to log out? You'll need to sign in again to access your account.</p>
+        <div class="confirm-btns">
+            <button class="confirm-btn cancel-btn" onclick="closeLogoutModal()">
+                <i class="fas fa-times" aria-hidden="true"></i> Cancel
+            </button>
+            <a href="{% url 'logout' %}" class="confirm-btn confirm-logout">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Yes, Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+let scrollPosition = 0;
+function openModal() {
+    scrollPosition = window.pageYOffset;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = '100%';
+    document.getElementById('editModal').style.display = 'block';
+    document.getElementById('editModal').focus();
+}
+function closeModal() {
+    document.getElementById('editModal').style.display = 'none';
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPosition);
+}
+function openLogoutModal() {
+    scrollPosition = window.pageYOffset;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.width = '100%';
+    document.getElementById('logoutModal').style.display = 'block';
+    document.getElementById('logoutModal').focus();
+}
+function closeLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'none';
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPosition);
+}
+window.onclick = function(event) {
+    const editModal = document.getElementById('editModal');
+    const logoutModal = document.getElementById('logoutModal');
+    if (event.target === editModal) closeModal();
+    if (event.target === logoutModal) closeLogoutModal();
+};
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const editModal = document.getElementById('editModal');
+        const logoutModal = document.getElementById('logoutModal');
+        if (editModal.style.display === 'block') closeModal();
+        if (logoutModal.style.display === 'block') closeLogoutModal();
+    }
+});
+</script>
+{% endblock %}
+
+
+
