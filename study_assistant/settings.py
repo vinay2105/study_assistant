@@ -32,9 +32,9 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
 ALLOWED_HOSTS = [
-    "your-app.onrender.com",
     "localhost",
     "127.0.0.1",
+    "study-assistant-t0hd.onrender.com",
 ]
 
 
